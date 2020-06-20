@@ -1,0 +1,43 @@
+## Configure variables for subsampling workflow.
+## See dag.svg for possible target output files.
+
+# Target subsampling schemes as output folders.
+folders:
+  ["sub", "sub_random", 
+  "sub_rtl", "sub_uniform-tempo", 
+  "sub_uniform-spatiotempo",
+  "sub_uniform-spatiotempo-alt",
+  "sub_postsubsampling"]
+
+# Target output file types per subsampling scheme.
+types:
+  ["fasttre.nwk.png", "rtt.png"]
+
+# Prefix of input sample or clade. 
+sample:
+  ph_hiv
+
+# No. of sequences to sample for simple random sampling scheme.
+randsize:
+  300
+
+# Retained relative tree length for RTL subsampling scheme.
+rtl:
+  0.5
+
+# Threads to use for RTL subsampling scheme. 
+rtl_threads:
+  4
+
+# No. of sequences to sample for the 2 uniform schemes.
+unisize:
+  300
+
+# No. of time intervals to sample from in the 2 uniform schemes.
+uniinterv:
+  80
+
+# % of sequences to sample per deme under postsubsampling scheme.
+fixperc:
+  0.25
+
