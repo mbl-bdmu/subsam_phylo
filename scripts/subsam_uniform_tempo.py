@@ -33,11 +33,16 @@ pattern = "([0-9]{4}-[0-9]{2}-[0-9]{2})"
 with open(headers, "r") as heads:
 	for h in heads:
 		h = h.strip("\n")
-		d = re.search(pattern, h).group().split("-")
-		d = [int(d) for d in d]
-		d = dt.datetime(d[0],d[1],d[2])
-		d = pyasl.decimalYear(d)
-		heads_dates.append([h,d])
+		d = re.search(pattern, h)
+		if d is None:
+			print(d, f'Excluding {h}. Date does not follow YYYY-MM-DD format')
+			continue
+		else:
+			d = d.group().split("-")
+			d = [int(d) for d in d]
+			d = dt.datetime(d[0],d[1],d[2])
+			d = pyasl.decimalYear(d)
+			heads_dates.append([h,d])
 
 # Set up dataframe of headers and decimal dates
 colnames = ["header", "decimal_year"]

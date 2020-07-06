@@ -4,5 +4,5 @@
 ALNFILE=$1
 TREEFILE=${ALNFILE%.fa}.fasttre.nwk
 
-/mnt/c/Users/Guest1/fgmp_working_dir/apps/FastTreeMP -nt -gtr -gamma < $ALNFILE > $TREEFILE
+fasttree -nt -gtr -gamma < $ALNFILE > $TREEFILE
 

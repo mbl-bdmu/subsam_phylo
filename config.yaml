@@ -15,7 +15,7 @@ types:
 
 # Prefix of input sample or clade. 
 sample:
-  ph_hiv
+  gisaid_cov_mafft
 
 # No. of sequences to sample for simple random sampling scheme.
 randsize:
@@ -23,7 +23,7 @@ randsize:
 
 # Retained relative tree length for RTL subsampling scheme.
 rtl:
-  0.5
+  0.75
 
 # Threads to use for RTL subsampling scheme. 
 rtl_threads:

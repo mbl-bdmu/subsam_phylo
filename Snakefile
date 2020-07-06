@@ -16,8 +16,6 @@ rule extract_sequences:
         "{folder}/{sample}.headers.txt"
     output:
         "{folder}/{sample}.fa"
-    log:
-        "logs/{folder}/{sample}.extr_seq.log"
     script:
         "scripts/io_alignment.py"
 
@@ -26,8 +24,6 @@ rule generate_fasttree:
         "{folder}/{sample}.fa"
     output:
         "{folder}/{sample}.fasttre.nwk"
-    log:
-        "logs/{folder}/{sample}.gen_fasttre.log"
     shell:
         "scripts/run_fasttree.sh {input}"
 
@@ -39,8 +35,6 @@ rule root_to_tip:
     output:
         "{folder}/{sample}.dates.txt",
         "{folder}/{sample}.rtt.png" 
-    log:
-        "logs/{folder}/{sample}.rtt.log"
     shell:
         "scripts/plot_rtt.sh {input} {output}"
 
@@ -50,8 +44,6 @@ rule tree_img:
     output:
         "{folder}/{sample}.fasttre.nwk.png",
         "{folder}/{sample}.fasttre.nwk.pdf"
-    log:
-        "logs/{folder}/{sample}.tree_img.log"
     shell:
         "Rscript --vanilla scripts/plot_tree.R {input}"
 
@@ -63,8 +55,6 @@ rule sub_random:
         "sub_random/{sample}.headers.txt"
     params:
         size=config["randsize"]
-    log:
-        "logs/sub_random/{sample}.log"
     script:
         "scripts/subsam_random.py"
 
@@ -76,8 +66,6 @@ rule sub_rtl:
     params:
         rtl=config["rtl"],
         threads=config["rtl_threads"]
-    log:
-        "logs/sub_rtl/{sample}.sub.log"
     shell:
         "scripts/subsam_rtl.sh {input} {output} {params.rtl} {params.threads}"
 
@@ -89,8 +77,6 @@ rule sub_uniform_tempo:
     params:
         size=config["unisize"],
         intervals=config["uniinterv"]
-    log:
-        "logs/sub_uniform-tempo/{sample}.sub.log"
     script:
         "scripts/subsam_uniform_tempo.py"
 
@@ -103,8 +89,6 @@ rule sub_uniform_spatiotempo:
     params:
         size=config["unisize"],
         intervals=config["uniinterv"]
-    log:
-        "logs/sub_uniform-spatiotempo/{sample}.sub.log"
     script:
         "scripts/subsam_uniform_spatiotempo.py"
 
@@ -114,8 +98,6 @@ rule sub_uniform_spatiotempo_alt:
       "master/{sample}.loc.tsv"
     output:
       "sub_uniform-spatiotempo-alt/{sample}.headers.txt"
-    log:
-        "logs/sub_uniform-spatiotempo-alt/{sample}.sub.log"
     script:
       "scripts/subsam_uniform_spatiotempo_alt.py"
 
@@ -127,7 +109,5 @@ rule sub_postsubsam:
         "sub_postsubsampling/{sample}.headers.txt"
     params:
         size=config["fixperc"]
-    log:
-        "logs/sub_postsubsampling/{sample}.sub.log"
     script:
         "scripts/subsam_post.py"

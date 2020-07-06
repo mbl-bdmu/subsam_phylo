@@ -24,16 +24,23 @@ headers = os.getenv('headers') #snakemake.input[0]
 dates = os.getenv('dates') #snakemake.output[0]
 
 # Extract calendar dates, convert to decimal year.
+# Exclude headers without any dates or whose dates do not follow the 
+# format 'YYYY-MM-DD'.
 heads_dates = []
 pattern = "([0-9]{4}-[0-9]{2}-[0-9]{2})"
 with open(headers, "r") as heads:
 	for h in heads:
 		h = h.strip("\n")
-		d = re.search(pattern, h).group().split("-")
-		d = [int(d) for d in d]
-		d = dt.datetime(d[0],d[1],d[2])
-		d = pyasl.decimalYear(d)
-		heads_dates.append([h,d])
+		d = re.search(pattern, h)
+		if d is None:
+			print(d, f'Excluding {h}. Date does not follow YYYY-MM-DD format')
+			continue
+		else:
+			d = d.group().split("-")
+			d = [int(d) for d in d]
+			d = dt.datetime(d[0],d[1],d[2])
+			d = pyasl.decimalYear(d)
+			heads_dates.append([h,d])
 
 # Set up dataframe of headers and decimal dates
 deciyr_colnames = ["name", "date"]
@@ -42,7 +49,7 @@ tab.to_csv(dates, index=False, header=True, sep=",")
 EOF
 
 # Calculate root-to-tip divergence, plot RTT and tree.
-CMD="treetime clock --tree $NWKFILE --dates $DATES --aln $ALN --outdir $OUTDIR --plot-rtt $REG --covariation --clock-filter"
+CMD="treetime clock --tree $NWKFILE --dates $DATES --aln $ALN --outdir $OUTDIR --plot-rtt $REG --covariation --clock-filter 3"
 echo "Running $CMD"; eval $CMD
 
 # TO DOs: 
