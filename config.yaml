@@ -19,7 +19,7 @@ sample:
 
 # No. of sequences to sample for simple random sampling scheme.
 randsize:
-  300
+  200
 
 # Retained relative tree length for RTL subsampling scheme.
 rtl:
@@ -31,11 +31,11 @@ rtl_threads:
 
 # No. of sequences to sample for the 2 uniform schemes.
 unisize:
-  300
+  200
 
 # No. of time intervals to sample from in the 2 uniform schemes.
 uniinterv:
-  80
+  16
 
 # % of sequences to sample per deme under postsubsampling scheme.
 fixperc:
