@@ -7,6 +7,7 @@ dependencies:
   - pyfaidx
   - treetime
   - r-base
+  - bioconductor-ggtree
   - snakemake
   - pandas
   - fasttree
@@ -14,5 +15,3 @@ dependencies:
   - python
   - joblib
   - ete3
-prefix: /home/fgmp/miniconda3/envs/subsam-env
-
