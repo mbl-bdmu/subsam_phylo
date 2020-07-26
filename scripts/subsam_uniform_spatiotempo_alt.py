@@ -4,9 +4,9 @@ import datetime as dt
 import random
 import re
 
+import pandas as pd
 from PyAstronomy import pyasl
 import numpy as np
-import pandas as pd
 
 
 def assign_interval(date, last, intervals):
@@ -26,8 +26,8 @@ headers = snakemake.input[0]
 demes = snakemake.input[1]
 outfile = snakemake.output[0]
 
-# Exclude headers without deme or location metadata. Of the included 
-# headers, count the number of demes that have an included header.
+# Count the number of sequences with location data and the number of
+# locations that have at least 1 sequence assigned to it.
 filt_heads = []
 filt_demes = []
 deme_colnames = ["header", "deme"]
@@ -72,7 +72,7 @@ first, last = deci_yrs[0], deci_yrs[-1]
 date_range_length = last - first
 Tsamp = date_range_length
 nr = len(set(filt_demes))
-nt = len(filt_heads)
+nt = len(filt_heads)  ## FIXME: shouldn't this value ("total no of sequences collected") exclude those without proper date YYYY-MM-DD??
 ni = nt/nr+1
 interval_length = Tsamp/ni
 intervals = np.arange(first, last, interval_length)
@@ -83,6 +83,7 @@ tab["time_interval"] = tab["decimal_year"].apply(
 	assign_interval,
 	args=(last, intervals)
 	)
+# Merge ensures sequences to be considered all have date and deme.
 tab = tab.merge(demes, how='inner', 
 				left_on='header', right_on='header')
 
