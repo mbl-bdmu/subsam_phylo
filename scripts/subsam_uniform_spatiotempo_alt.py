@@ -26,40 +26,37 @@ headers = snakemake.input[0]
 demes = snakemake.input[1]
 outfile = snakemake.output[0]
 
-# Count the number of sequences with location data and the number of
-# locations that have at least 1 sequence assigned to it.
+# Select only sequences with both location data & a date
+# following the format 'YYYY-MM-DD'. From these, select only
+# locations that have at least 1 such sequence assigned to it.
 filt_heads = []
 filt_demes = []
+heads_dates = []
 deme_colnames = ["header", "deme"]
 demes = pd.read_csv(demes, sep="\t", header=None, names=deme_colnames)
-with open(headers, "r") as heads:
-	for h in heads:
-		h = h.strip("\n")
-		if h in demes["header"].tolist():
-			filt_heads.append(h)
-			d = demes[demes.header.str.contains(h)]["deme"]
-			d = d.tolist()[0]
-			filt_demes.append(d)
-heads = filt_heads
-
-# Extract calendar dates, convert to decimal year.
-# Exclude headers without any dates or whose dates do not follow the 
-# format 'YYYY-MM-DD'.
-heads_dates = []
 pattern = "([0-9]{4}-[0-9]{2}-[0-9]{2})"
 with open(headers, "r") as heads:
 	for h in heads:
 		h = h.strip("\n")
 		d = re.search(pattern, h)
-		if d is None:
-			print(d, f'Excluding {h}. Date does not follow YYYY-MM-DD format')
+		if h not in demes["header"].tolist():
+			print(f'Excluding {h}, has no deme.')
+			continue
+		elif d is None:
+			print(f'Excluding {h}. Date does not follow YYYY-MM-DD format.')
 			continue
 		else:
+			# Convert calendar dates to decimal year.
 			d = d.group().split("-")
 			d = [int(d) for d in d]
 			d = dt.datetime(d[0],d[1],d[2])
 			d = pyasl.decimalYear(d)
 			heads_dates.append([h,d])
+
+			filt_heads.append(h)
+			D = demes[demes.header.str.contains(h)]["deme"]
+			D = D.tolist()[0]
+			filt_demes.append(D)
 
 # Set up dataframe of headers and decimal dates
 deciyr_colnames = ["header", "decimal_year"]
@@ -71,8 +68,8 @@ deci_yrs = sorted(tab.decimal_year.tolist(), key=None)
 first, last = deci_yrs[0], deci_yrs[-1]
 date_range_length = last - first
 Tsamp = date_range_length
-nr = len(set(filt_demes))
-nt = len(filt_heads)  ## FIXME: shouldn't this value ("total no of sequences collected") exclude those without proper date YYYY-MM-DD??
+nr = len(set(filt_demes))  # only count demes whose seqs have both date & deme
+nt = len(filt_heads)  # only count seqs that have both date & deme
 ni = nt/nr+1
 interval_length = Tsamp/ni
 intervals = np.arange(first, last, interval_length)
