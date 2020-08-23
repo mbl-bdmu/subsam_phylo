@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+dependencies:
+  - ete3=3.1.1
+  - joblib=0.15.1
+  - numpy=1.18.5
+  - matplotlib=3.2.1

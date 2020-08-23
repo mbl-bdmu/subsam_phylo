@@ -1,3 +1,4 @@
+container: "docker://pgmp/subsam-conda:v1.2"
 configfile: "config.yaml"
 
 rule all:
@@ -16,6 +17,8 @@ rule extract_sequences:
         "{folder}/{sample}.headers.txt"
     output:
         "{folder}/{sample}.fa"
+    conda:
+        "envs/conda3.yaml"
     script:
         "scripts/io_alignment.py"
 
@@ -24,6 +27,8 @@ rule generate_fasttree:
         "{folder}/{sample}.fa"
     output:
         "{folder}/{sample}.fasttre.nwk"
+    conda:
+        "envs/conda3.yaml"
     shell:
         "scripts/run_fasttree.sh {input}"
 
@@ -34,7 +39,9 @@ rule root_to_tip:
         "{folder}/{sample}.fa"
     output:
         "{folder}/{sample}.dates.txt",
-        "{folder}/{sample}.rtt.png" 
+        "{folder}/{sample}.rtt.png"
+    conda:
+        "envs/conda1.yaml"
     shell:
         "scripts/plot_rtt.sh {input} {output}"
 
@@ -44,6 +51,8 @@ rule tree_img:
     output:
         "{folder}/{sample}.fasttre.nwk.png",
         "{folder}/{sample}.fasttre.nwk.pdf"
+    conda:
+        "envs/conda4.yaml"
     shell:
         "Rscript --vanilla scripts/plot_tree.R {input}"
 
@@ -66,6 +75,8 @@ rule sub_rtl:
     params:
         rtl=config["rtl"],
         threads=config["rtl_threads"]
+    conda:
+        "envs/conda2.yaml"
     shell:
         "scripts/subsam_rtl.sh {input} {output} {params.rtl} {params.threads}"
 
@@ -77,6 +88,8 @@ rule sub_uniform_tempo:
     params:
         size=config["unisize"],
         intervals=config["uniinterv"]
+    conda:
+        "envs/conda1.yaml"
     script:
         "scripts/subsam_uniform_tempo.py"
 
@@ -89,6 +102,8 @@ rule sub_uniform_spatiotempo:
     params:
         size=config["unisize"],
         intervals=config["uniinterv"]
+    conda:
+        "envs/conda1.yaml"
     script:
         "scripts/subsam_uniform_spatiotempo.py"
 
@@ -98,6 +113,8 @@ rule sub_uniform_spatiotempo_alt:
       "master/{sample}.loc.tsv"
     output:
       "sub_uniform-spatiotempo-alt/{sample}.headers.txt"
+    conda:
+        "envs/conda1.yaml"
     script:
       "scripts/subsam_uniform_spatiotempo_alt.py"
 
@@ -109,5 +126,7 @@ rule sub_postsubsam:
         "sub_postsubsampling/{sample}.headers.txt"
     params:
         size=config["fixperc"]
+    conda:
+        "envs/conda1.yaml"
     script:
         "scripts/subsam_post.py"

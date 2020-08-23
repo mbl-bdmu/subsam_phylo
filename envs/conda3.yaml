@@ -1,0 +1,5 @@
+channels:
+  - bioconda
+dependencies:
+  - pyfaidx=0.5.8
+  - fasttree=2.1.10
