@@ -49,6 +49,19 @@ with open(headers, "r") as heads:
 			# Convert calendar dates to decimal year.
 			d = d.group().split("-")
 			d = [int(d) for d in d]
+
+			# FIXME:
+			# If date "DD" equals "00", choose if best to ignore and
+			# let the script continue by uncommenting code below, to
+			# keep seq by assigning day to mid-month as too many seqs
+			# lost since lacking day, or to let the user encounter an
+			# error and adjust inputs to conform to format. See if
+			# other schemes need such handling too.
+			#
+			#if d[2] == 0:
+			#	print(f'Excluding {h}. Date is out of range for month.')
+			#	continue
+
 			d = dt.datetime(d[0],d[1],d[2])
 			d = pyasl.decimalYear(d)
 			heads_dates.append([h,d])
