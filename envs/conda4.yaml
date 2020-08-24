@@ -1,5 +1,7 @@
 channels:
   - conda-forge
+  - bioconda
+  - defaults
 dependencies:
   - r-base=4.0.2
   - bioconductor-ggtree=2.2.1
