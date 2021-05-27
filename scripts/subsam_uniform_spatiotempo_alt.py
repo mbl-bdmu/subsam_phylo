@@ -107,3 +107,5 @@ sampled_headers_out = pd.DataFrame(uniform_sampled_heads,
 # Save headers to file
 sampled_headers_out.to_csv(outfile, index=False, header=False)
 
+# Write all stratifications to file.
+tab_strats.to_csv("all_strata.tsv", index=False, header=False, sep="\t")
