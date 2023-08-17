@@ -41,3 +41,6 @@ uniinterv:
 fixperc:
   0.25
 
+# Max no. of sequences from each deme to sample at random.
+balanced_randsize:
+  34

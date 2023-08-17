@@ -130,3 +130,14 @@ rule sub_postsubsam:
         "envs/conda1.yaml"
     script:
         "scripts/subsam_post.py"
+
+rule sub_balanced:
+    input:
+        "sub/{sample}.headers.txt",
+        "master/{sample}.loc.tsv"
+    output:
+        "sub_random_balanced/{sample}.headers.txt"
+    params:
+        size=config["balanced_randsize"]
+    script:
+        "scripts/subsam_random_balanced.py"
